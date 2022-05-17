@@ -23,10 +23,7 @@ project_entries:
 footer_entries:
 
   - title: github
-    url: https://github.com/abhinavs
-
-  - title: feed
-    url: feed.xml
+    url: https://github.com/rhendsonaf
 
 misc_entries:
   - title: this is an example vertical list
@@ -46,10 +43,7 @@ misc_entries:
     url: false
     entries:
       - title: on Github
-        url: https://github.com/abhinavs/moonwalk
-
-      - title: originally built for abhinav's homepage
-        url: https://www.abhinav.co
+        url: https://github.com/rhendsonaf/Digital_Image_Processing
 
       - title: this list is scalable and can be nested
         url: false
