@@ -3,6 +3,7 @@ layout: post
 title: About
 ---
 
-This is an example page!
-
-Actually, it has the same layout of a post...
+Esse espaço é um repositório de códigos documentados, referentes
+aos algoritmos de processamento digital de imagens, desenvolvidos
+nesta disciplina.
+Autoria: Rhendson Alexandre e Mário Marques
