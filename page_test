@@ -177,3 +177,10 @@ cv.destroyAllWindows()
 
 ```
 Assim, com a máscara pronta, o algoritmo realiza uma série de loopings que varrem a figura completamente utilizando a máscara como base rotulando as bolhas conforme suas bordas.
+
+<div align="center">
+<img src="imgs/bolhas_filled.png" alt="Bolhas-Resultado" width="600"/>
+</div>
+<div align="center">
+<figcaption>Resultado da operação com a imagem</figcaption>
+</div>
