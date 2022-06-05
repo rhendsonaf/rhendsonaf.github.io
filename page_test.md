@@ -177,3 +177,59 @@ cv.destroyAllWindows()
 
 ```
 Assim, com a máscara pronta, o algoritmo realiza uma série de loopings que varrem a figura completamente utilizando a máscara como base rotulando as bolhas conforme suas bordas.
+
+## 3. Equalização de Histogramas
+
+O algorítmo à seguir pega o video capturado pela câmera e mostra um histograma equalizado dessa captura em tons de cinza.
+
+```python
+
+import numpy as np
+from matplotlib import pyplot as plt
+import cv2 as cv
+
+capture = cv.VideoCapture(0)
+
+fig, ax = plt.subplots()
+ax.set_title('Histogram (grayscale)')
+ax.set_xlabel('Bin')
+ax.set_ylabel('Frequency')
+
+```
+A câmera de video do computador passa a capturar as imagens e as armazena na variável "capture". Após isso, a preparação para o plot do histograma é realizado em uma janela própria.
+
+```python
+
+lw = 3
+alpha = 0.5
+bins = 64
+
+lineGray, = ax.plot(np.arange(bins), np.zeros((bins,1)), c='k', lw=lw)
+
+ax.set_xlim(0, bins-1)
+ax.set_ylim(0, 1)
+plt.ion()
+plt.show()
+
+
+
+while True:
+    (grabbed, frame) = capture.read()
+
+    if not grabbed:
+        break
+
+
+numPixels = np.prod(frame.shape[:2])
+
+gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
+cv.imshow('Grayscale', gray)
+histogram = cv.calcHist([gray], [0], None, [bins], [0, 255]) / numPixels
+lineGray.set_ydata(histogram)
+
+fig.canvas.draw()
+
+cv.waitKey(1)
+
+capture.release()
+cv.destroyAllWindows()
