@@ -188,7 +188,8 @@ import numpy as np
 from matplotlib import pyplot as plt
 import cv2 as cv
 
-capture = cv.VideoCapture(0)
+cap = cv.VideoCapture(0)
+cv.equalizeHist( cap, capture );
 
 fig, ax = plt.subplots()
 ax.set_title('Histogram (grayscale)')
@@ -196,7 +197,7 @@ ax.set_xlabel('Bin')
 ax.set_ylabel('Frequency')
 
 ```
-A câmera de video do computador passa a capturar as imagens e as armazena na variável "capture". Após isso, a preparação para o plot do histograma é realizado em uma janela própria.
+A câmera de video do computador passa a capturar as imagens e as armazena na variável "capture". Após isso, a preparação para o plot do histograma é realizado em uma janela própria e a equalização do video é feito pela função ```equalizeHist()```.
 
 ```python
 
@@ -204,13 +205,15 @@ lw = 3
 alpha = 0.5
 bins = 64
 
-lineGray, = ax.plot(np.arange(bins), np.zeros((bins,1)), c='k', lw=lw)
+lineGray = ax.plot(np.arange(bins), np.zeros((bins,1)), c='k', lw=lw)
 
 ax.set_xlim(0, bins-1)
 ax.set_ylim(0, 1)
 plt.ion()
 plt.show()
 
+```
+A função ```plot()``` é definida recebendo os eixos X e Y, além da cor preta e a espessura da linha. 
 
 
 while True:
@@ -227,9 +230,15 @@ cv.imshow('Grayscale', gray)
 histogram = cv.calcHist([gray], [0], None, [bins], [0, 255]) / numPixels
 lineGray.set_ydata(histogram)
 
+```
+O algorítmo utiliza um dos canais, o converte em tons de cinza e calcula o histograma a ser exibido.
+```python
+
 fig.canvas.draw()
 
-cv.waitKey(1)
+cv.waitKey()
 
 capture.release()
 cv.destroyAllWindows()
+```
+O histograma da gravação da câmera é desenhado até que qualquer tecla seja pressionada.
