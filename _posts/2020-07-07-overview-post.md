@@ -1,7 +1,3 @@
----
-layout: post
-author: Mário Marques e Rhendson Alexandre 
----
 # Digital_Image_Processing
 
 Esta página é dedicada à publicar os trabalhos realizados para a disciplina de Processamento Digital de Imagens, ministrada pelo professor Agostinho Brito, e realizado pelos alunos Rhendson Alexandre e Mário Marques, utilizando a biblioteca OpenCV em linguagens como Python e C++.
