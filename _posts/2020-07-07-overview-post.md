@@ -178,6 +178,13 @@ cv.destroyAllWindows()
 ```
 Assim, com a máscara pronta, o algoritmo realiza uma série de loopings que varrem a figura completamente utilizando a máscara como base rotulando as bolhas conforme suas bordas.
 
+<div align="center">
+<img src="imgs/bolhas_filled.png" alt="Bolhas"/>
+</div>
+<div align="center">
+<figcaption>Imagem das bolhas com o floodfil</figcaption>
+</div>
+
 ## 3. Equalização de Histogramas
 
 O algorítmo à seguir pega o video capturado pela câmera e mostra um histograma equalizado dessa captura em tons de cinza.
@@ -233,5 +240,3 @@ cv.waitKey(1)
 
 capture.release()
 cv.destroyAllWindows()
-
-```
