@@ -248,7 +248,7 @@ cv.destroyAllWindows()
 O algorítmo a seguir é utilizado para realizar um filtro homomórfico por meio de uma filtragem no domínio da frequência, de uma forma que nossa imagem mal iluminada tenha os valores de iluminação alterados, como a reflectância e iluminância, com o objetivo de melhorar sua visualização.
  
 <div align="center">
-<img src="imgs/homomorfico.png" alt="homomórfico"/>
+<img src="imgs/Homomorfico_resultado.png" alt="homomórfico"/>
 </div>
 <div align="center">
 <figcaption>Imagem com má iluminação a ser modificada.</figcaption>
@@ -418,7 +418,7 @@ int main(int argc, char** argv) {
 A função main ajusta toda a visualização e utiliza as outras funções criadas para ajustar os parâmetros da filtragem homomórfica, a qual a captura do resultado obtido se encontra abaixo. Fecha a janela após a tecla Esc ser apertada.
 
 <div align="center">
-<img src="imgs/Homomorfico_resultado.png" alt="homomórfico resultado"/>
+<img src="imgs/Homomorfico.png" alt="homomórfico resultado"/>
 </div>
 <div align="center">
 <figcaption>Imagem após a filtragem.</figcaption>
