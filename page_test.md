@@ -240,3 +240,186 @@ cv.waitKey(1)
 
 capture.release()
 cv.destroyAllWindows()
+
+```
+
+## 6. Filtragem Homomórfica
+
+O algorítmo a seguir é utilizado para realizar um filtro homomórfico por meio de uma filtragem no domínio da frequência, de uma forma que nossa imagem mal iluminada tenha os valores de iluminação alterados, como a reflectância e iluminância, com o objetivo de melhorar sua visualização.
+ 
+<div align="center">
+<img src="imgs/homomorfico.png" alt="homomórfico"/>
+</div>
+<div align="center">
+<figcaption>Imagem com má iluminação a ser modificada.</figcaption>
+</div>
+
+```cpp
+
+#include <iostream>
+#include <opencv2/opencv.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+
+using namespace cv;
+using namespace std;
+
+float gl = 0; int gl_slider = 0; int gl_slider_max = 100;
+float gh = 0; int gh_slider = 50; int gh_slider_max = 100;
+float d0 = 0; int d0_slider = 50; int d0_slider_max = 100;
+float c = 0; int c_slider = 5; int c_slider_max = 100;
+
+char TrackbarName[50];
+
+cv::Mat imaginaryInput, complexImage, multsp;
+cv::Mat padded, filter, mag;
+cv::Mat image, imagegray, tmp, magI;
+cv::Mat_<float> realInput, zeros, ones;
+cv::Mat backgroundImage;
+std::vector<cv::Mat> planos;
+
+float mean;
+char key;
+int dft_M, dft_N;
+
+int dft_M = cv::getOptimalDFTSize(image.rows);
+int dft_N = cv::getOptimalDFTSize(image.cols);
+
+```
+O algorítmo prepara os valores das barras de ajustes dos parâmetros GammaL, GammaH, D0 e C para o filtro, além de inicializar as matrizes necessárias para as operações.
+
+```cpp
+
+void deslocaDFT(Mat& image) {
+    Mat tmp2, A, B, C, D;
+    
+    image = image(Rect(0, 0, image.cols & -2, image.rows & -2));
+    int cx = image.cols / 2;
+    int cy = image.rows / 2;
+    
+    A = image(Rect(0, 0, cx, cy));
+    B = image(Rect(cx, 0, cx, cy));
+    C = image(Rect(0, cy, cx, cy));
+    D = image(Rect(cx, cy, cx, cy));
+
+    A.copyTo(tmp2);  D.copyTo(A);  tmp2.copyTo(D);
+    C.copyTo(tmp2);  B.copyTo(C);  tmp2.copyTo(B);
+}
+
+```
+A função acima foi implementada para realizar o passo de trocar as regiões da imagem, especificamente as regiões A com a D e a B com a C, devido a facilitação que esta operação trará quando trabalhamos no espectro de Fourier.
+
+```cpp
+
+void on_trackbar_homomorphic(int, void*) {
+    gl = (float)gl_slider / 100.0;
+    gh = (float)gh_slider / 100.0;
+    d0 = 25.0 * d0_slider / 100.0;
+    c = (float)c_slider / 100.0;
+
+    cout << "gl = " << gl << endl;
+    cout << "gh = " << gh << endl;
+    cout << "d0 = " << d0 << endl;
+    cout << "c = " << c << endl;
+
+    image = imread("homomorfico.png");
+    cvtColor(image, imagegray, COLOR_BGR2GRAY);
+    imshow("original", imagegray);
+    
+    copyMakeBorder(imagegray, padded, 0, dft_M - image.rows, 0, dft_N - image.cols, BORDER_CONSTANT, Scalar::all(0));
+
+```
+
+Ajusta os valores dos sliders e sua formatação na imagem a ser visualizada, para isso ele lê a imagem a sofrer a filtragem e cria uma margem para encaixar os sliders dos parâmetros. 
+    
+```cpp
+
+    planos.clear();
+    realInput = Mat_<float>(padded);
+    planos.push_back(realInput);
+    planos.push_back(zeros);
+    merge(planos, complexImage);
+
+    dft(complexImage, complexImage);
+
+    deslocaDFT(complexImage);
+
+    for (int i = 0; i < tmp.rows; i++) {
+        for (int j = 0; j < tmp.cols; j++) {
+            float d2 = (i - dft_M / 2) * (i - dft_M / 2) + (j - dft_N / 2) * (j - dft_N / 2);
+            //cout << "d2 = " << d2 << endl;
+            tmp.at<float>(i, j) = (gh - gl) * (1.0 - (float)exp(-(c * d2 / (d0 * d0)))) + gl;
+        }
+    }
+
+    Mat comps[] = { tmp, tmp };
+    merge(comps, 2, filter);
+    mulSpectrums(complexImage, filter, complexImage, 0);
+
+    deslocaDFT(complexImage);
+
+    idft(complexImage, complexImage);
+    planos.clear();
+    split(complexImage, planos);
+    
+    normalize(planos[0], planos[0], 0, 1, NORM_MINMAX);
+    imshow("filtrada", planos[0]);
+
+}
+
+```
+
+O resto da função chama a DeslocaDFT e realiza a filtragem homomórfica na imagem com as regiões trocadas, além realizar um filtro frequencial e fazer a transformada inversa, com uma normalização da parte real para a exibição na tela.
+    
+```cpp
+
+int main(int argc, char** argv) {
+
+    namedWindow("original", WINDOW_NORMAL);
+    namedWindow("filtrada", WINDOW_NORMAL);
+
+    if (argc != 2) {
+        cerr << "Usage: " << argv[0] << " <img_path>" << endl;
+        return 1;
+    }
+
+    image = imread("homomorfico.png");
+
+    dft_M = getOptimalDFTSize(image.rows);
+    dft_N = getOptimalDFTSize(image.cols);
+    
+    copyMakeBorder(image, padded, 0, dft_M - image.rows, 0, dft_N - image.cols, BORDER_CONSTANT, Scalar::all(0));
+
+    zeros = Mat_<float>::zeros(padded.size());
+    complexImage = Mat(padded.size(), CV_32FC2, Scalar(0));
+    filter = complexImage.clone();
+    tmp = Mat(dft_M, dft_N, CV_32F);
+
+    sprintf(TrackbarName, "gamma_l"); 
+    createTrackbar(TrackbarName, "filtrada", &gl_slider, gl_slider_max, on_trackbar_homomorphic);
+    sprintf(TrackbarName, "gamma_h");
+    createTrackbar(TrackbarName, "filtrada", &gh_slider, gh_slider_max, on_trackbar_homomorphic);
+    sprintf(TrackbarName, "d_zero");
+    createTrackbar(TrackbarName, "filtrada", &d0_slider, d0_slider_max, on_trackbar_homomorphic);
+    sprintf(TrackbarName, "c");
+    createTrackbar(TrackbarName, "filtrada", &c_slider, c_slider_max, on_trackbar_homomorphic);
+
+    on_trackbar_homomorphic(100, NULL);
+
+    while (1) {
+        key = (char)waitKey(10);
+        if (key == 27) break; // esc pressed!
+    }
+
+    return 0;
+}
+
+```
+
+A função main ajusta toda a visualização e utiliza as outras funções criadas para ajustar os parâmetros da filtragem homomórfica, a qual a captura do resultado obtido se encontra abaixo. Fecha a janela após a tecla Esc ser apertada.
+
+<div align="center">
+<img src="imgs/Homomorfico_resultado.png" alt="homomórfico resultado"/>
+</div>
+<div align="center">
+<figcaption>Imagem após a filtragem.</figcaption>
+</div>
