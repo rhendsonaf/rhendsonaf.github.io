@@ -259,12 +259,15 @@ O código em anexo é responsável por realizar a obtenção do vídeo da câmer
 Diante disso, foi solicitada a inclusão de um novo filtro: Um Filtro Laplaciano do Gaussiano.
 
 Após pesquisar na Literatura, encontramos a seguinte máscara para realizar o filtro Laplaciano do Gaussiano:
-<div align="center">
-| 0 | 0 | -1 | 0 | 0 |
-| 0 | -1 | -2 | -1 | 0 |
-| -1 | -2 | 16 | -2 | -1 |
-| 0 | -1 | -2 | -1 | 0 |
-| 0 | 0 | -1 | 0 | 0 |
+<div align="center">   
+    
+|   0   |   0   |  -1   |   0   |   0   |
+| :---: | :---: | :---: | :---: | :---: |
+|   0   |  -1   |  -2   |  -1   |   0   |
+|  -1   |  -2   |  16   |  -2   |  -1   |
+|   0   |  -1   |  -2   |  -1   |   0   |
+|   0   |   0   |  -1   |   0   |   0   |
+ 
 </div>
 
 Após isso, foi realizada a inclusão dessa máscara no código seguindo o mesmo padrão das anteriores.
