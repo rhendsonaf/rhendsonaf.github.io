@@ -302,12 +302,14 @@ A seguir, podemos ver a imagem original, a versão apenas com o filtro Laplacian
 <figcaption>Imagem inicial a ser aplicada os filtros detectores de bordas.</figcaption>
 </div>
 
+
 <div align="center">
 <img src="imgs/quarto_laplacian.png"/>
 </div>
 <div align="center">
 <figcaption>Imagem sob filtro Laplaciano puro.</figcaption>
 </div>
+
 
 <div align="center">
 <img src="imgs/quarto_laplgauss.png"/>
