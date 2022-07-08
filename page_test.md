@@ -243,6 +243,76 @@ cv.destroyAllWindows()
 
 ```
 
+
+## 5. Filtragem no Domínio Espacial
+
+Uma vez que os exercícios seguintes partiam de uma base de código em c++, chegamos a conclusão que seria inviável a adaptação de todos os códigos bases para python. Após esse ponto, o desenvolvimento dos códigos teve sua linguagem de programação mudada e usaremos C++. Para o exercício 5, foi tomado como base de código o programa [filtroespacial.cpp](codes/filtroespacial.cpp).
+
+O código em anexo é responsável por realizar a obtenção do vídeo da câmera em tempo real e aplicar, sobre ele, os seguintes filtros espaciais:
+- Filtro da Média;
+- Filtro Gaussiano;
+- Filtro Sobel Horizontal;
+- Filtro Sobel Vertical;
+- Filtro Laplaciano;
+- Filtro de Boost.
+
+Diante disso, foi solicitada a inclusão de um novo filtro: Um Filtro Laplaciano do Gaussiano.
+
+Após pesquisar na Literatura, encontramos a seguinte máscara para realizar o filtro Laplaciano do Gaussiano:
+<div align="center">
+| 0 | 0 | -1 | 0 | 0 |
+| 0 | -1 | -2 | -1 | 0 |
+| -1 | -2 | 16 | -2 | -1 |
+| 0 | -1 | -2 | -1 | 0 |
+| 0 | 0 | -1 | 0 | 0 |
+</div>
+
+Após isso, foi realizada a inclusão dessa máscara no código seguindo o mesmo padrão das anteriores.
+
+```cpp
+
+float laplgauss[] = {0,  0, -1,  0, 0,
+                     0, -1, -2, -1, 0,
+                    -1, -2, 16, -2, -1, 
+                     0, -1, -2, -1, 0,
+                     0,  0, -1,  0, 0};
+
+```
+A seguir, foi aplicada a máscara seguindo o mesmo funcionamento original do programa. Foi apenas especificado que a nova máscara era do tamanho 5x5 e que o efeito seria realizado ao pressionar a tecla "x". 
+
+```cpp
+case 'x':
+        mask = cv::Mat(5, 5, CV_32F, laplgauss);    
+        printmask(mask);
+        break;
+
+```
+
+O código completo para testes pode ser obtido [aqui](codes/questao5.cpp).
+
+A seguir, podemos ver a imagem original, a versão apenas com o filtro Laplaciano e a versão com o filtro Laplaciano aplicado sobre o filtro Gaussiano. 
+
+<div align="center">
+<img src="imgs/quarto.png"/>
+</div>
+<div align="center">
+<figcaption>Imagem inicial a ser aplicada os filtros detectores de bordas.</figcaption>
+</div>
+
+<div align="center">
+<img src="imgs/quarto_laplacian.png"/>
+</div>
+<div align="center">
+<figcaption>Imagem sob filtro Laplaciano puro.</figcaption>
+</div>
+
+<div align="center">
+<img src="imgs/quarto_laplgauss.png"/>
+</div>
+<div align="center">
+<figcaption>Imagem com filtro Laplaciano do Gaussiano.</figcaption>
+</div>
+
 ## 6. Filtragem Homomórfica
 
 O algorítmo a seguir é utilizado para realizar um filtro homomórfico por meio de uma filtragem no domínio da frequência, de uma forma que nossa imagem mal iluminada tenha os valores de iluminação alterados, como a reflectância e iluminância, com o objetivo de melhorar sua visualização.
