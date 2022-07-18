@@ -498,3 +498,5 @@ A função main ajusta toda a visualização e utiliza as outras funções criad
 <div align="center">
 <figcaption>Imagem após a filtragem.</figcaption>
 </div>
+
+## Projeto Final - Detecção de Sono (Nome provisório)
