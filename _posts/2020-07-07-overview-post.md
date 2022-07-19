@@ -590,6 +590,8 @@ def anotar_marcos_casca_convexa(imagem, marcos, ar_olho_esq, ar_olho_dir):
     return imagem
 ```
 
+Essa etapa é importante para dar uma representação visual para quem está usando, pois essa função serve para desenhar o contorno dos olhos. Para isso, ele interliga os pontos de cada um dos olhos para formar uma casca convexa representando a abertura dos olhos. Ela também só realiza o desenho caso o ```detector_face()``` tenha encontrado alguma, além de usar o valor do aspecto de razão como referência para colorir a casca nos olhos: Caso o valor seja maior que 0.25, aparece verde, e caso seja igual ou menor, é pintado em vermelho.
+
 ```python
 
 def padronizar_imagem(frame):
