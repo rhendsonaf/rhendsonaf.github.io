@@ -600,6 +600,8 @@ def padronizar_imagem(frame):
     return frame
 ```
 
+A função acima tem o objetivo, como já diz, de padronizar a janela de exibição para 500 x 400, isso pode ser mudado de acordo com a necessidade do video a ser detectado. Porém, é bastante satisfatório para o formato da câmera utilizada.
+
 ```python
 
 min_olho_dir = 1
