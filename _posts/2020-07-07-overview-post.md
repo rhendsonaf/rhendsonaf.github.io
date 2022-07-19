@@ -544,6 +544,26 @@ def aspecto_razao_olhos(pontos_olhos):
     aspecto_razao = (a + b)/(2.0 * c)
     
     return aspecto_razao
+```
+A função acima pega os 6 pontos de cada um dos olhos e realiza calcula a distância euclidiana de 3 pares de pontos, da forma que é representado nas imagens à seguir. Após isso, é calculado a taxa de abertura dos olhos com esses valores para saber se eles estão abertos ou fechados na câmera.
+
+<div align="center">
+<img src="../imgs/Olho.png" alt="M_Olho" width="500"/>
+</div>
+<div align="center">
+<figcaption>Representação aproximada dos marcos faciais em um dos olhos.</figcaption>
+</div>
+
+<div align="center">
+<img src="../imgs/Olho 2.png" alt="Distâncias euclidianas dos pontos do olho" width="500"/>
+</div>
+<div align="center">
+<figcaption>Representação das distâncias euclidianas utilizadas.</figcaption>
+</div>
+
+
+```python
+
 
 def anotar_marcos_casca_convexa(imagem, marcos, ar_olho_esq, ar_olho_dir):
     retangulos = detector_face(imagem, 1)
@@ -568,11 +588,17 @@ def anotar_marcos_casca_convexa(imagem, marcos, ar_olho_esq, ar_olho_dir):
             cv2.drawContours(imagem, [pontos], 0, (0,0,255), 1)
     
     return imagem
+```
+
+```python
 
 def padronizar_imagem(frame):
     frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     frame = cv2.resize(frame, (500, 400))
     return frame
+```
+
+```python
 
 min_olho_dir = 1
 min_olho_esq = 1
@@ -620,3 +646,4 @@ while(True):
   
 video.release()
 cv2.destroyAllWindows()
+```
