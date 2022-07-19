@@ -500,3 +500,123 @@ A função main ajusta toda a visualização e utiliza as outras funções criad
 </div>
 
 ## Projeto Final - Detecção de Sono (Nome provisório)
+
+### Código
+
+```python
+
+import cv2
+import numpy as np
+import dlib
+import matplotlib.pyplot as plt
+from scipy.spatial import distance as dist
+
+classificador_dlib_68_path = "classificadores/shape_predictor_68_face_landmarks.dat"
+classificador_dlib = dlib.shape_predictor(classificador_dlib_68_path)
+detector_face = dlib.get_frontal_face_detector()
+
+````
+
+```python
+
+def pontos_marcos_faciais(imagem):
+    retangulos = detector_face(imagem, 1)
+    
+    if len(retangulos) == 0:
+        return None
+    
+    marcos = []
+    
+    for ret in retangulos:
+        marcos.append(np.matrix([[p.x, p.y] for p in classificador_dlib(imagem,ret).parts()]))
+    
+    return marcos 
+```
+A função ```pontos_marcos_faciais()``` utiliza como prerrequisito, a detecção de face. Dessa forma, caso não haja um retângulo contendo uma face na imagem, o método não chamará o classificador. Assim, as coordenadas dos pontos delimitados pelo retângulo são reunidas por meio da função ```parts()``` do classificador e retorna esse conjunto de pontos que representam os marcos faciais.
+
+```python
+def aspecto_razao_olhos(pontos_olhos):
+    
+    a = dist.euclidean(pontos_olhos[1], pontos_olhos[5])
+    b = dist.euclidean(pontos_olhos[2], pontos_olhos[4])
+    c = dist.euclidean(pontos_olhos[0], pontos_olhos[3])
+    
+    aspecto_razao = (a + b)/(2.0 * c)
+    
+    return aspecto_razao
+
+def anotar_marcos_casca_convexa(imagem, marcos, ar_olho_esq, ar_olho_dir):
+    retangulos = detector_face(imagem, 1)
+    
+    if len(retangulos) == 0:
+        return None
+    
+    for idx, ret in enumerate(retangulos):
+        marco = marcos[idx]
+        if ((ar_olho_esq > 0.25)) and (ar_olho_dir > 0.25):
+            pontos = cv2.convexHull(marco[OLHO_ESQUERDO])
+            cv2.drawContours(imagem, [pontos], 0, (0,255,0), 1)
+        
+            pontos = cv2.convexHull(marco[OLHO_DIREITO])
+            cv2.drawContours(imagem, [pontos], 0, (0,255,0), 1) 
+            
+        elif ((ar_olho_esq <= 0.20)) and (ar_olho_dir <= 0.20):
+            pontos = cv2.convexHull(marco[OLHO_ESQUERDO])
+            cv2.drawContours(imagem, [pontos], 0, (0,0,255), 1)
+        
+            pontos = cv2.convexHull(marco[OLHO_DIREITO])
+            cv2.drawContours(imagem, [pontos], 0, (0,0,255), 1)
+    
+    return imagem
+
+def padronizar_imagem(frame):
+    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    frame = cv2.resize(frame, (500, 400))
+    return frame
+
+min_olho_dir = 1
+min_olho_esq = 1
+
+OLHO_DIREITO = list(range(36,42))
+OLHO_ESQUERDO = list(range(42,48))
+
+video = cv2.VideoCapture(0)
+  
+while(True):
+      
+    captura_ok, frame = video.read()
+    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    
+    if captura_ok:
+        frame = padronizar_imagem(frame)
+        marcos_faciais = pontos_marcos_faciais(frame)
+        
+        if marcos_faciais is not None:
+            
+            ar_olho_esq = aspecto_razao_olhos(marcos_faciais[0][OLHO_ESQUERDO])
+            ar_olho_dir = aspecto_razao_olhos(marcos_faciais[0][OLHO_DIREITO])
+            
+            ar_olho_esq = round(ar_olho_esq, 3)
+            ar_olho_dir = round(ar_olho_dir, 3)
+            
+            if ar_olho_esq < min_olho_esq:
+                min_olho_esq = ar_olho_esq
+                
+            if ar_olho_dir < min_olho_dir:
+                min_olho_dir = ar_olho_dir
+            
+            info_oe = "olho esquerdo " + str(ar_olho_esq) + " minimo " + str(min_olho_esq)
+            info_od = "olho direito " + str(ar_olho_dir) + " minimo " + str(min_olho_dir)
+            
+            frame = anotar_marcos_casca_convexa(frame, marcos_faciais, ar_olho_esq, ar_olho_dir)
+            
+            if ((ar_olho_esq <= 0.20)) and (ar_olho_dir <= 0.20):
+                cv2.putText(frame, "ACORDE!", (100, 350), cv2.FONT_HERSHEY_SIMPLEX, 2.5, (0,0,255), 5)
+            
+        cv2.imshow('frame', frame)
+      
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+  
+video.release()
+cv2.destroyAllWindows()
