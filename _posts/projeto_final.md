@@ -1,3 +1,7 @@
+---
+layout: post
+---
+
 ## Projeto Final - Detecção de Sono
 
 Como o projeto final do curso de PDI, escolhemos trabalhar com a detecção facial de humanos. O nosso foco não foi dado à etapa de comparação e predição de faces aprendidas por um modelo de detecção, mas à uma aplicação sobre a detecção do que é uma face. 
