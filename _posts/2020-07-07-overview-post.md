@@ -670,3 +670,10 @@ cv2.destroyAllWindows()
 ```
 
 Esse final é usado para chamar as funções para agrupar os pontos dos olhos, desenhá-los na tela e calcular a taxa de abertura dos olhos. Esse valor também é utilizado para exibir um texto escrito "Acorde" quando a taxa é igual ou menor que 0.20. Assim, uma janela com a câmera e a cascava convexa é desenhada em tempo real caso haja um rosto e se os olhos estiverem fechados, a mensagem aparecerá e a casca se tornará vermelha. Ao final, para fechar a janela, basta apertar a tecla "Q".
+
+<div align="center">
+<img src="../imgs/Resultado.png" alt="Resultado" width="700"/>
+</div>
+<div align="center">
+<figcaption>Demonstração da utilização do programa com olhos abertos e fechados.</figcaption>
+</div>
