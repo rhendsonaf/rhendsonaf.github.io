@@ -499,13 +499,13 @@ A função main ajusta toda a visualização e utiliza as outras funções criad
 <figcaption>Imagem após a filtragem.</figcaption>
 </div>
 
-## Projeto Final - Detecção de Sono (Nome provisório)
+## Projeto Final - Detecção de Sono
 
-Como o projeto final do curso de PDI, escolhemos realizar a detecção facial de humanos. O nosso foco não foi dado à etapa de comparação e predição de faces aprendidas por um modelo de detecção, mas à uma aplicação sobre a detecção do que é uma face. 
+Como o projeto final do curso de PDI, escolhemos trabalhar com a detecção facial de humanos. O nosso foco não foi dado à etapa de comparação e predição de faces aprendidas por um modelo de detecção, mas à uma aplicação sobre a detecção do que é uma face. 
 
 Os algoritmos responsáveis por realizarem esse tipo de detecção são conhecidos como classificados e são amplamente estudados na literatura. Um exemplo de classificador estudado ao logo desse projeto, foi o classificador de Eigenfaces.
 
-O classificador Eigenfaces se baseia no PCA (Principal Component Analysis), um procedimento estatístico para diminuir a dimensionalidade de características de uma grande quantidade de informação, para conjuntos menores de características conhecidas. Analogamento poderíamos citar o funcionamento bastante parecido de uma Transformada de Fourier: A partir de um sinal obtido, podemos realizar a sua decomposição em várias funções oscilatórias com parâmetros bem conhecidos, como amplitude e frequência. 
+O classificador Eigenfaces se baseia no PCA (Principal Component Analysis), um procedimento estatístico para diminuir a dimensionalidade de características de uma grande quantidade de informação, para conjuntos menores de características conhecidas. Analogamente poderíamos citar o funcionamento bastante parecido de uma Transformada de Fourier: A partir de um sinal obtido, podemos realizar a sua decomposição em várias funções oscilatórias com parâmetros bem conhecidos, como amplitude e frequência. 
 
 O Funcionamento do Eigenfaces
 - A partir de um banco de faces, é realizada uma "sobreposição" de todas as imagens a fim de gerar uma "Face Média" (FM) do banco. Essa FM contém, ao mesmo tempo, todas as característica identitárias dos individuos que a compõe. A seguir podemos visualizar um exemplo de FM.
@@ -531,6 +531,7 @@ Indo de encontro ao intuito deste trabalho, o objetivo não seria treinar um mod
 
 No projeto em questão foi utilizado o classificador de 68 pontos da biblioteca Dlib. Esse classificador trabalha assim como descrito acima, utilizando uma base pré treinada para traçar marcos faciais especificos: Sobrancelhas, olhos, nariz, boca e mandíbula. Os contornos das regiões em questão são realizados por retas e os encontros entre essas retas são os pontos, sendo 68 ao total. 
 
+Focamos nossa atenção especificamente aos olhos de forma a aplicar a detecção à alguma operação. O algoritmo em questão verifica se o individuo está de olhos fechados ou abertos e envia um sinal de alerta em caso de olhos fechados, podendo simbolizar um dispositivo para evitar que motoristas durmam ao volante. 
 
 ### Código
 
