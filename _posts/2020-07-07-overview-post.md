@@ -511,7 +511,7 @@ O Funcionamento do Eigenfaces
 - A partir de um banco de faces, é realizada uma "sobreposição" de todas as imagens a fim de gerar uma "Face Média" (FM) do banco. Essa FM contém, ao mesmo tempo, todas as característica identitárias dos individuos que a compõe. A seguir podemos visualizar um exemplo de FM.
 
 <div align="center">
-<img src="../imgs/eigenface.png" alt="Exemplo de Eigenfaces"/>
+<img src="../imgs/eigenface.jfif" alt="Exemplo de Eigenfaces"/>
 </div>
 <div align="center">
 <figcaption>Exemplo de Eigenfaces.</figcaption>
