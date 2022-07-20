@@ -501,6 +501,37 @@ A função main ajusta toda a visualização e utiliza as outras funções criad
 
 ## Projeto Final - Detecção de Sono (Nome provisório)
 
+Como o projeto final do curso de PDI, escolhemos realizar a detecção facial de humanos. O nosso foco não foi dado à etapa de comparação e predição de faces aprendidas por um modelo de detecção, mas à uma aplicação sobre a detecção do que é uma face. 
+
+Os algoritmos responsáveis por realizarem esse tipo de detecção são conhecidos como classificados e são amplamente estudados na literatura. Um exemplo de classificador estudado ao logo desse projeto, foi o classificador de Eigenfaces.
+
+O classificador Eigenfaces se baseia no PCA (Principal Component Analysis), um procedimento estatístico para diminuir a dimensionalidade de características de uma grande quantidade de informação, para conjuntos menores de características conhecidas. Analogamento poderíamos citar o funcionamento bastante parecido de uma Transformada de Fourier: A partir de um sinal obtido, podemos realizar a sua decomposição em várias funções oscilatórias com parâmetros bem conhecidos, como amplitude e frequência. 
+
+O Funcionamento do Eigenfaces
+- A partir de um banco de faces, é realizada uma "sobreposição" de todas as imagens a fim de gerar uma "Face Média" (FM) do banco. Essa FM contém, ao mesmo tempo, todas as característica identitárias dos individuos que a compõe. A seguir podemos visualizar um exemplo de FM.
+
+<div align="center">
+<img src="../imgs/eigenface.png" alt="Exemplo de Eigenfaces"/>
+</div>
+<div align="center">
+<figcaption>Exemplo de Eigenfaces.</figcaption>
+</div>
+
+- Essa FM agora é um conjunto robusto de informações e utilizamos o PCA para separar quais componentes principais são as componentes identitárias do sujeito: Uma componente pode estar associada a barba, outra à óculos, outra à ausência de cabelos, etc. 
+- Na fase de treinamento, o modelo é responsável por separar essas componentes e relacionar sujeitos à componentes.
+- Na fase de detecção, podemos atribuir pesos às características e comparar, quais característica tem maior influência na identidade de um sujeito. Assim podemos detectar, quantitativamente, que os sujeitos que tem maiores pesos associados às características, são os sujeitos mais parecidos. 
+
+As operações realizadas são puramente estatísticas e bem mais complexas, a explicação acima tem o intuito de facilitar o entendimento.
+
+Indo de encontro ao intuito deste trabalho, o objetivo não seria treinar um modelo e realizar a detecção dos individuos, mas utilizar as componentes identitárias de um modelo pré treinado, para definir marcos faciais e agir sobre eles. No caso em questão, poderíamos utilizar um Eigenfaces para definir as componentes olho, boca e nariz e detectar essas características. Não para uma identificação de individuos, mas para uma identificação visual da existencia ou não, de um olho, boca ou nariz, na imagem analisada. Seguindo esse exemplo, teríamos os seguintes passos:
+
+- A entrada do nosso algoritmo seriam as imagens da webcam;
+- Essas imagens seriam comparadas com um Eigenfaces a fim de detectar se existem principais componentes do tipo olhos, bocas ou narizes nas imagens;
+- Após identificar e traçar um limiar nessas regiões, realizar alguma operação baseada na coleta desses dados.
+
+No projeto em questão foi utilizado o classificador de 68 pontos da biblioteca Dlib. Esse classificador trabalha assim como descrito acima, utilizando uma base pré treinada para traçar marcos faciais especificos: Sobrancelhas, olhos, nariz, boca e mandíbula. Os contornos das regiões em questão são realizados por retas e os encontros entre essas retas são os pontos, sendo 68 ao total. 
+
+
 ### Código
 
 ```python
