@@ -590,7 +590,7 @@ def anotar_marcos_casca_convexa(imagem, marcos, ar_olho_esq, ar_olho_dir):
     return imagem
 ```
 
-Essa etapa é importante para dar uma representação visual para quem está usando, pois essa função serve para desenhar o contorno dos olhos. Para isso, ele interliga os pontos de cada um dos olhos para formar uma casca convexa representando a abertura dos olhos. Ela também só realiza o desenho caso o ```detector_face()``` tenha encontrado alguma, além de usar o valor do aspecto de razão como referência para colorir a casca nos olhos: Caso o valor seja maior que 0.25, aparece verde, e caso seja igual ou menor, é pintado em vermelho.
+Essa etapa é importante para dar uma representação visual para quem está usando, pois essa função serve para desenhar o contorno dos olhos. Para isso, ele interliga os pontos de cada um dos olhos para formar uma casca convexa representando a abertura dos olhos. Ela também só realiza o desenho caso o ```detector_face()``` tenha encontrado alguma, além de usar o valor do aspecto de razão como referência para colorir a casca nos olhos: Caso o valor seja maior que 0.20, aparece verde, e caso seja igual ou menor, é pintado em vermelho.
 
 ```python
 
@@ -603,9 +603,6 @@ def padronizar_imagem(frame):
 A função acima tem o objetivo, como já diz, de padronizar a janela de exibição para 500 x 400, isso pode ser mudado de acordo com a necessidade do video a ser detectado. Porém, é bastante satisfatório para o formato da câmera utilizada.
 
 ```python
-
-min_olho_dir = 1
-min_olho_esq = 1
 
 OLHO_DIREITO = list(range(36,42))
 OLHO_ESQUERDO = list(range(42,48))
@@ -626,18 +623,6 @@ while(True):
             ar_olho_esq = aspecto_razao_olhos(marcos_faciais[0][OLHO_ESQUERDO])
             ar_olho_dir = aspecto_razao_olhos(marcos_faciais[0][OLHO_DIREITO])
             
-            ar_olho_esq = round(ar_olho_esq, 3)
-            ar_olho_dir = round(ar_olho_dir, 3)
-            
-            if ar_olho_esq < min_olho_esq:
-                min_olho_esq = ar_olho_esq
-                
-            if ar_olho_dir < min_olho_dir:
-                min_olho_dir = ar_olho_dir
-            
-            info_oe = "olho esquerdo " + str(ar_olho_esq) + " minimo " + str(min_olho_esq)
-            info_od = "olho direito " + str(ar_olho_dir) + " minimo " + str(min_olho_dir)
-            
             frame = anotar_marcos_casca_convexa(frame, marcos_faciais, ar_olho_esq, ar_olho_dir)
             
             if ((ar_olho_esq <= 0.20)) and (ar_olho_dir <= 0.20):
@@ -651,3 +636,5 @@ while(True):
 video.release()
 cv2.destroyAllWindows()
 ```
+
+Esse final é usado para chamar as funções para agrupar os pontos dos olhos, desenhá-los na tela e calcular a taxa de abertura dos olhos. Esse valor também é utilizado para exibir um texto escrito "Acorde" quando a taxa é igual ou menor que 0.20. Assim, uma janela com a câmera e a cascava convexa é desenhada em tempo real caso haja um rosto e se os olhos estiverem fechados, a mensagem aparecerá e a casca se tornará vermelha. Ao final, para fechar a janela, basta apertar a tecla "Q".
