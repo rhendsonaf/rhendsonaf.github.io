@@ -17,7 +17,7 @@ project_entries:
     desc: Projects are shown in card layout
 
   - title: 3º Unidade
-    url: projeto_final
+    url: _posts/projeto_final.md
     desc: You can control visibility from _config.yml file
 
 footer_entries:
